@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://dsabxjvkd1nub"]
+
+[ext_resource type="Script" path="res://scripts/plateform.gd" id="1_xc5ic"]
+
+[node name="Plateform" type="Polygon2D"]
+polygon = PackedVector2Array(-88, -67, 88, -67, 88, 67, -88, 67)
+script = ExtResource("1_xc5ic")
+metadata/_edit_group_ = true
+
+[node name="Polygon2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Polygon2D"]
+visible = false
+polygon = PackedVector2Array(-88, -67, 88, -67, 88, 67, -88, 67)

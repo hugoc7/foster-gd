@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://dy47t2s2h4jpu"]
+
+[ext_resource type="Script" path="res://scripts/game.gd" id="1_8n6jr"]
+[ext_resource type="PackedScene" uid="uid://dsabxjvkd1nub" path="res://scenes/plateform.tscn" id="2_vph1n"]
+[ext_resource type="PackedScene" uid="uid://ba6fs7ryv0xo3" path="res://scenes/player.tscn" id="3_582vm"]
+[ext_resource type="Script" path="res://scripts/camera.gd" id="4_vd58l"]
+[ext_resource type="PackedScene" uid="uid://dw7ndsbqfnsy1" path="res://scenes/hud.tscn" id="5_qd2b5"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_8n6jr")
+player_scene = ExtResource("3_582vm")
+
+[node name="Plateform" parent="." instance=ExtResource("2_vph1n")]
+position = Vector2(287, 255)
+polygon = PackedVector2Array(-167, -63, -103, -63, -103, -255, -63, -255, -63, -63, 89, -63, 385, -63, 385, -7, 89, -7, 89, 65, -87, 65, -167, 65)
+
+[node name="Plateform2" parent="." instance=ExtResource("2_vph1n")]
+position = Vector2(936, 504)
+scale = Vector2(-1, 1)
+polygon = PackedVector2Array(-167, -63, -103, -63, -103, -255, -63, -255, -63, -63, 89, -63, 385, -63, 385, -7, 89, -7, 89, 65, -87, 65, -167, 65)
+
+[node name="CameraPlayer" type="Camera2D" parent="."]
+position = Vector2(576, 320)
+script = ExtResource("4_vd58l")
+
+[node name="HUD" parent="." instance=ExtResource("5_qd2b5")]
+
+[node name="PlayerSpawnPoint" type="Marker2D" parent="."]
+position = Vector2(408, 128)
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+spawn_path = NodePath("../ReplicatedNodes")
+spawn_limit = 10
+
+[node name="ReplicatedNodes" type="Node" parent="."]
+
+[node name="Player" parent="." instance=ExtResource("3_582vm")]
+
+[connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]
+[connection signal="player_died" from="Player" to="." method="_on_player_died"]

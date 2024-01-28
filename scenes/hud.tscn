@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://dw7ndsbqfnsy1"]
+
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_lpaki"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_lpaki")
+
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PlayerName" type="Label" parent="HSplitContainer"]
+layout_mode = 2
+text = "J1 : Hugo"
+
+[node name="LifeBar" type="ProgressBar" parent="HSplitContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 1.0
+value = 1.0

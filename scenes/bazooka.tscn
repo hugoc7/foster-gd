@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://bfhhtcfxrhhpa"]
+
+[ext_resource type="Texture2D" uid="uid://c36f33cpqwwrk" path="res://sprites/armes/spr_bazooka.png" id="1_q6p3r"]
+[ext_resource type="Script" path="res://scripts/bazooka.gd" id="2_ijgmv"]
+
+[node name="Bazooka" type="Sprite2D"]
+texture = ExtResource("1_q6p3r")
+script = ExtResource("2_ijgmv")
+
+[node name="MissilePosition" type="Marker2D" parent="."]
+position = Vector2(48, 0)
