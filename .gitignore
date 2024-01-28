@@ -1,3 +1,11 @@
 # Godot 4+ specific ignores
 .godot/
 *.tmp
+
+# Track only scripts for now
+/sons
+/sprites
+/exports
+icon.svg
+icon.svg.import
+.gitattributes
