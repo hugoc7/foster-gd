@@ -23,15 +23,21 @@ var local_player_info = {"name": "Anonymous"}
 
 var players_loaded = 0
 
-func _emit_player_connected(peer_id, player_info):
-	print_debug("Player ", peer_id, " has connected as ", player_info.name)	
-	player_connected.emit(peer_id, player_info)
-
 func _ready():
-	multiplayer.peer_connected.connect(_on_peer_connected)
+	multiplayer.connected_to_server.connect(_client_on_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
+	multiplayer.server_disconnected.connect(_on_server_disconnected)	
 	
-
+func is_server():
+	if not multiplayer.multiplayer_peer:
+		return false
+	return multiplayer.is_server()
+	
+func get_unique_id():
+	if not multiplayer.multiplayer_peer:
+		return 0
+	return multiplayer.get_unique_id()
+	
 func join_game(address = ""):
 	if address.is_empty():
 		address = DEFAULT_SERVER_IP
@@ -48,44 +54,49 @@ func create_game():
 	if error:
 		return error
 	multiplayer.multiplayer_peer = peer
-
+	
 	players[1] = local_player_info
-	_emit_player_connected(1, local_player_info)
+	player_connected.emit(1, local_player_info)
+	
+## The client  has connected to the server (client side)
+func _client_on_connected():
+	print_debug("[",multiplayer.get_unique_id() ,"] ",
+		"Request connection as ", local_player_info.name)
+	_server_request_new_player.rpc_id(1, local_player_info)
 	
 
-
-func remove_multiplayer_peer():
-	multiplayer.multiplayer_peer = null
-
-
-# When a peer connects, send them my player info.
-# This allows transfer of all desired data for each player, not only the unique ID.
-func _on_peer_connected(id):
+@rpc("any_peer", "call_local", "reliable")	
+## The client sends his player info to the server and request player creation
+func _server_request_new_player(player_info):
+	if not multiplayer.is_server():
+		return
+	var player_id : int = multiplayer.get_remote_sender_id()
+	print_debug("[",multiplayer.get_unique_id() ,"] ",
+		"Player ", player_id, " has connected as ", player_info.name)
+	players[player_id] = player_info
+	_client_new_player.rpc(player_id, players)
+	player_connected.emit(player_id, player_info)
+	
+@rpc("authority", "call_local", "reliable")	
+## The server tells to all clients that there is a new player
+func _client_new_player(player_id, player_info_list):
 	if multiplayer.is_server():
-		_register_player.rpc_id(id, local_player_info)
-	else:
-		var peer_id = multiplayer.get_unique_id()
-		players[peer_id] = local_player_info
-		_emit_player_connected(peer_id, local_player_info)
-
-
-@rpc("any_peer", "reliable")
-func _register_player(new_player_info):
-	var new_player_id = multiplayer.get_remote_sender_id()
-	players[new_player_id] = new_player_info
-	_emit_player_connected(new_player_id, new_player_info)
-
-
+		return
+	players = player_info_list
+	print_debug("[",multiplayer.get_unique_id() ,"] ",
+		"Player ", player_id, " has connected as ", players[player_id].name)
+	player_connected.emit(player_id,  players[player_id])
+	
 func _on_peer_disconnected(id):	
 	var player_info = {}
 	var player_name = "?"
 	if players.has(id):
 		player_info = players[id]
 		player_name = player_info.name
-	print_debug("Player ", id, " (", player_name ,") has disconnected")
-	player_disconnected.emit(id, player_info)
-
-
+	print_debug("[",multiplayer.get_unique_id() ,"] ",
+		"Player ", id, " (", player_name ,") has disconnected")
+	players.erase(id)
+	player_disconnected.emit(id)
 
 func _on_server_disconnected():
 	multiplayer.multiplayer_peer = null

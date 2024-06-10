@@ -28,13 +28,9 @@ script = ExtResource("4_vd58l")
 [node name="PlayerSpawnPoint" type="Marker2D" parent="."]
 position = Vector2(408, 128)
 
+[node name="Players" type="Node" parent="."]
+
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-spawn_path = NodePath("../ReplicatedNodes")
+_spawnable_scenes = PackedStringArray("res://scenes/player.tscn")
+spawn_path = NodePath("../Players")
 spawn_limit = 10
-
-[node name="ReplicatedNodes" type="Node" parent="."]
-
-[node name="Player" parent="." instance=ExtResource("3_582vm")]
-
-[connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]
-[connection signal="player_died" from="Player" to="." method="_on_player_died"]
