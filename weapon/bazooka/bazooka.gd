@@ -2,7 +2,7 @@ extends Sprite2D
 
 class_name Bazooka
 
-const missile = preload("res://scenes/missile.tscn")
+const missile = preload("res://projectile/missile.tscn")
 
 func fire():
 	var missile_instance = missile.instantiate()

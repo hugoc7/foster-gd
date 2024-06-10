@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dsabxjvkd1nub"]
 
-[ext_resource type="Script" path="res://scripts/plateform.gd" id="1_xc5ic"]
+[ext_resource type="Script" path="res://plateform/plateform.gd" id="1_xc5ic"]
 
 [node name="Plateform" type="Polygon2D"]
 polygon = PackedVector2Array(-88, -67, 88, -67, 88, 67, -88, 67)

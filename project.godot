@@ -11,13 +11,13 @@ config_version=5
 [application]
 
 config/name="FosterGD"
-run/main_scene="res://scenes/lobby.tscn"
+run/main_scene="res://lobby/lobby.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-Network="*res://scripts/network.gd"
+Network="*res://network/network.gd"
 
 [input]
 

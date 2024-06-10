@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://584oawlb3hxe"]
 
-[ext_resource type="Script" path="res://scripts/lobby.gd" id="1_tjmnk"]
-[ext_resource type="PackedScene" uid="uid://dy47t2s2h4jpu" path="res://scenes/game.tscn" id="2_wgw8g"]
+[ext_resource type="Script" path="res://lobby/lobby.gd" id="1_tjmnk"]
+[ext_resource type="PackedScene" uid="uid://dy47t2s2h4jpu" path="res://game/game.tscn" id="2_wgw8g"]
 
 [node name="Lobby" type="CanvasLayer"]
 script = ExtResource("1_tjmnk")

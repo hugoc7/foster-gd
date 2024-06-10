@@ -1,11 +1,11 @@
 [gd_scene load_steps=4 format=3 uid="uid://dw7ndsbqfnsy1"]
 
-[ext_resource type="Script" path="res://scripts/hud.gd" id="1_lpaki"]
-[ext_resource type="PackedScene" uid="uid://63xwu5ht4k11" path="res://scenes/score_board.tscn" id="2_bok16"]
-[ext_resource type="Script" path="res://scripts/score_board.gd" id="3_ca3np"]
+[ext_resource type="Script" path="res://hud/hud.gd" id="1_d7rob"]
+[ext_resource type="PackedScene" uid="uid://63xwu5ht4k11" path="res://hud/score_board.tscn" id="2_bok16"]
+[ext_resource type="Script" path="res://hud/score_board.gd" id="3_jldsn"]
 
 [node name="HUD" type="CanvasLayer"]
-script = ExtResource("1_lpaki")
+script = ExtResource("1_d7rob")
 
 [node name="HSplitContainer" type="HSplitContainer" parent="."]
 offset_right = 40.0
@@ -30,4 +30,4 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("3_ca3np")
+script = ExtResource("3_jldsn")
