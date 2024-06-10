@@ -13,7 +13,7 @@ const MAX_CONNECTIONS = 20
 
 # This will contain player info for every player,
 # with the keys being each player's unique IDs.
-var players = {}
+@export var players = {}
 
 # This is the local player info. This should be modified locally
 # before the connection is made. It will be passed to every other peer.
@@ -96,7 +96,7 @@ func _on_peer_disconnected(id):
 	print_debug("[",multiplayer.get_unique_id() ,"] ",
 		"Player ", id, " (", player_name ,") has disconnected")
 	players.erase(id)
-	player_disconnected.emit(id)
+	player_disconnected.emit(id, player_info)
 
 func _on_server_disconnected():
 	multiplayer.multiplayer_peer = null
