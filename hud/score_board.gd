@@ -6,7 +6,7 @@ func _ready():
 	Network.player_disconnected.connect(on_player_list_changed)
 	visible = false
 
-func on_player_list_changed(peer_id, player_info):
+func on_player_list_changed(_peer_id, _player_info):
 	update_player_list()
 	
 func update_player_list():

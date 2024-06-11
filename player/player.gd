@@ -24,6 +24,7 @@ var physics_enabled = false
 var direction:float = 0
 var jump_just_pressed = false
 @export var server_position = Vector2.ZERO
+@export var server_weapon_rotation: float = 0
 
 
 
@@ -46,10 +47,10 @@ func take_damage(amount: int):
 		die()
 	emit_signal("damage_taken", self)
 	
-func spawn(spawn_position: Vector2, peer_id: int):
-	print_debug("[", Network.get_unique_id(), "] Player ", peer_id, " spawned at ", spawn_position)
+func spawn(spawn_position: Vector2, _peer_id: int):
+	print_debug("[", Network.get_unique_id(), "] Player ", _peer_id, " spawned at ", spawn_position)
 	var local_peer_id : int = Network.get_unique_id()
-	var is_local_player : bool = local_peer_id == peer_id
+	var is_local_player : bool = local_peer_id == _peer_id
 	
 	if Network.is_server():
 		physics_enabled = true
@@ -59,7 +60,7 @@ func spawn(spawn_position: Vector2, peer_id: int):
 		
 	position = spawn_position
 	
-	self.peer_id = peer_id
+	self.peer_id = _peer_id
 	
 func _physics_process(delta):
 	# Add the gravity.
@@ -83,25 +84,39 @@ func _physics_process(delta):
 
 	move_and_slide()
 	
-func _process(delta):
+func _process(_delta):
 	if Network.is_server():
 		server_position = position
 	else:
 		position = server_position
+		
+	if Network.get_unique_id() != peer_id:
+		weapon.rotation = server_weapon_rotation
 	
 func _unhandled_input(event):
 	if event.is_action_pressed("fire"):
 		weapon.fire()
+		
+		
+	#TODO: don't send mouse information too often => setup a maximum sending frequence
 	if event is InputEventMouseMotion:
 		weapon.look_at(get_global_mouse_position())
-	direction = Input.get_axis("move_left", "move_right")
-	jump_just_pressed = Input.is_action_just_pressed("jump")
-	_server_receive_move_inputs.rpc_id(1, direction, jump_just_pressed)
+		_server_receive_look_inputs.rpc_id(1, weapon.rotation)
+		
+	if event.is_action("move_left") or event.is_action("move_right") or event.is_action("jump"):
+		direction = Input.get_axis("move_left", "move_right")
+		jump_just_pressed = Input.is_action_just_pressed("jump")
+		_server_receive_move_inputs.rpc_id(1, direction, jump_just_pressed)
 	
 @rpc("reliable", "any_peer", "call_local")
-func _server_receive_move_inputs(direction: float, jump: bool):
-	self.direction = direction
-	self.jump_just_pressed = jump
+func _server_receive_move_inputs(_direction: float, _jump: bool):
+	direction = _direction
+	jump_just_pressed = _jump
+	
+@rpc("unreliable_ordered", "any_peer", "call_local")
+func _server_receive_look_inputs(angle: float):
+	server_weapon_rotation = angle
+	weapon.rotation = angle
 
 		
 		

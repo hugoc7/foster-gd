@@ -16,9 +16,4 @@ func destroy():
 	queue_free()
 	#print_debug("Missile destroyed")
 	pass
-
-
-func _on_body_entered(body):
-	#destroy()
-	pass
 	

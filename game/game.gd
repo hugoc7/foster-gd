@@ -21,10 +21,10 @@ func _ready():
 	Network.player_connected.connect(add_new_player)
 	Network.player_disconnected.connect(on_player_disconnected)
 
-func on_player_disconnected(peer_id):
+func on_player_disconnected(_peer_id, _player_info):
 	for node in $Players.get_children():
 		var player = node as Player
-		if player.peer_id == peer_id:
+		if player.peer_id == _peer_id:
 			player.queue_free()
 		
 		
@@ -50,7 +50,7 @@ func add_new_player(peer_id: int, player_info):
 	#player_instance.player_died.connect(_on_player_died)
 	
 	
-func _process(delta):
+func _process(_delta):
 	
 	#make the camera follow the player
 	if local_player:
