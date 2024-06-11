@@ -12,9 +12,6 @@ var player_instances = {}
 	
 func _ready():
 	hud.update_player_name(Network.local_player_info.name)
-
-	$MultiplayerSpawner.set_spawn_function(client_on_player_spawned)
-	
 	for peer_id in Network.players:
 		add_new_player(peer_id, Network.players[peer_id])
 		
@@ -26,17 +23,6 @@ func on_player_disconnected(_peer_id, _player_info):
 		var player = node as Player
 		if player.peer_id == _peer_id:
 			player.queue_free()
-		
-		
-	
-func client_on_player_spawned(peer_id: int):
-	var player_instance : Player = player_scene.instantiate()
-	player_instance.name = str(peer_id)
-	if not player_instance: 
-		print_debug("Unable to instantiate player scene for peer ", peer_id)
-	player_instance.spawn($PlayerSpawnPoint.global_position, peer_id)
-	#player_instance.set_multiplayer_authority(1);
-	return player_instance
 	
 #Server only
 func add_new_player(peer_id: int, player_info):
@@ -46,8 +32,9 @@ func add_new_player(peer_id: int, player_info):
 	player_instance.name = player_info.name + str(peer_id)
 	if not player_instance: 
 		print_debug("Unable to instantiate player scene for peer ", peer_id)
-	$MultiplayerSpawner.spawn(peer_id)
-	#player_instance.player_died.connect(_on_player_died)
+	player_instance.spawn($PlayerSpawnPoint.global_position, peer_id)
+	$Players.add_child(player_instance)
+	
 	
 	
 func _process(_delta):

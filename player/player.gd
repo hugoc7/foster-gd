@@ -19,8 +19,6 @@ var alive = true
 var health = max_health
 @export var peer_id : int = 0
 var weapon
-var input_enabled = false
-var physics_enabled = false
 var direction:float = 0
 var jump_just_pressed = false
 @export var server_position = Vector2.ZERO
@@ -30,8 +28,12 @@ var jump_just_pressed = false
 
 func _ready():
 	weapon = $Bazooka
-	set_physics_process(physics_enabled)
-	set_process_unhandled_input(input_enabled)
+	print_debug("[", Network.get_unique_id(), "] Player ", peer_id, " spawned at ", position)
+	var local_peer_id : int = Network.get_unique_id()
+	var is_local_player : bool = local_peer_id == peer_id
+	
+	set_physics_process(Network.is_server())
+	set_process_unhandled_input(is_local_player)
 	
 
 func die():
@@ -47,20 +49,9 @@ func take_damage(amount: int):
 		die()
 	emit_signal("damage_taken", self)
 	
-func spawn(spawn_position: Vector2, _peer_id: int):
-	print_debug("[", Network.get_unique_id(), "] Player ", _peer_id, " spawned at ", spawn_position)
-	var local_peer_id : int = Network.get_unique_id()
-	var is_local_player : bool = local_peer_id == _peer_id
-	
-	if Network.is_server():
-		physics_enabled = true
-		
-	if is_local_player:
-		input_enabled = true
-		
+func spawn(spawn_position: Vector2, _peer_id: int):	
 	position = spawn_position
-	
-	self.peer_id = _peer_id
+	peer_id = _peer_id
 	
 func _physics_process(delta):
 	# Add the gravity.
