@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://ba6fs7ryv0xo3"]
+[gd_scene load_steps=7 format=3 uid="uid://ba6fs7ryv0xo3"]
 
 [ext_resource type="Script" path="res://player/player.gd" id="1_xy728"]
 [ext_resource type="Texture2D" uid="uid://7xfs84psr2gx" path="res://sprites/joueurs/spr_joueurbleu.png" id="2_xp66x"]
 [ext_resource type="PackedScene" uid="uid://bfhhtcfxrhhpa" path="res://weapon/bazooka/bazooka.tscn" id="3_aovk8"]
+[ext_resource type="Script" path="res://projectile/ProjectileManager.gd" id="4_rp8ic"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h65wu"]
 size = Vector2(30, 68)
@@ -34,3 +35,6 @@ shape = SubResource("RectangleShape2D_h65wu")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_3tevu")
+
+[node name="ProjectileManager" type="Node" parent="."]
+script = ExtResource("4_rp8ic")

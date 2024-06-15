@@ -17,17 +17,20 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var jump_counter = 0
 var alive = true
 var health = max_health
-@export var peer_id : int = 0
+var peer_id : int = 0 # dont specifiy @export 
 var weapon
 var direction:float = 0
 var jump_just_pressed = false
 @export var server_position = Vector2.ZERO
 @export var server_weapon_rotation: float = 0
-
-
+@export var projectiles_parent: Node = null
 
 func _ready():
+	#setup weapon
 	weapon = $Bazooka
+	weapon.projectile_manager = $ProjectileManager	
+	$Bazooka/ProjectileSpawner.spawn_path = projectiles_parent.get_path()
+	
 	print_debug("[", Network.get_unique_id(), "] Player ", peer_id, " spawned at ", position)
 	var local_peer_id : int = Network.get_unique_id()
 	var is_local_player : bool = local_peer_id == peer_id
@@ -35,7 +38,6 @@ func _ready():
 	set_physics_process(Network.is_server())
 	set_process_unhandled_input(is_local_player)
 	
-
 func die():
 	print_debug("Player died")
 	set_physics_process(false)
@@ -49,9 +51,11 @@ func take_damage(amount: int):
 		die()
 	emit_signal("damage_taken", self)
 	
-func spawn(spawn_position: Vector2, _peer_id: int):	
+func spawn(spawn_position: Vector2, _peer_id: int, _projectile_parent: Node):	
 	position = spawn_position
 	peer_id = _peer_id
+	projectiles_parent = _projectile_parent
+	
 	
 func _physics_process(delta):
 	# Add the gravity.
@@ -84,10 +88,14 @@ func _process(_delta):
 	if Network.get_unique_id() != peer_id:
 		weapon.rotation = server_weapon_rotation
 	
+
+func _fire():
+	weapon.fire()
+		
+
 func _unhandled_input(event):
 	if event.is_action_pressed("fire"):
-		weapon.fire()
-		
+		_fire()
 		
 	#TODO: don't send mouse information too often => setup a maximum sending frequence
 	if event is InputEventMouseMotion:

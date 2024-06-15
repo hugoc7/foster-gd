@@ -12,11 +12,20 @@ var player_instances = {}
 	
 func _ready():
 	hud.update_player_name(Network.local_player_info.name)
-	for peer_id in Network.players:
-		add_new_player(peer_id, Network.players[peer_id])
-		
-	Network.player_connected.connect(add_new_player)
+	
+	#Setup player spawner before spawning players
+	$PlayerSpawner.spawn_function = client_add_player
+	
 	Network.player_disconnected.connect(on_player_disconnected)
+	
+	
+	if Network.is_server(): 
+		for peer_id in Network.players:
+			server_add_player(peer_id, Network.players[peer_id])
+		Network.player_connected.connect(server_add_player)
+	else:
+		multiplayer.connected_to_server.connect(Network.request_new_player)
+		
 
 func on_player_disconnected(_peer_id, _player_info):
 	for node in $Players.get_children():
@@ -25,15 +34,17 @@ func on_player_disconnected(_peer_id, _player_info):
 			player.queue_free()
 	
 #Server only
-func add_new_player(peer_id: int, player_info):
-	if not Network.is_server(): 
-		return
-	var player_instance : Player = player_scene.instantiate()
-	player_instance.name = player_info.name + str(peer_id)
-	if not player_instance: 
-		print_debug("Unable to instantiate player scene for peer ", peer_id)
-	player_instance.spawn($PlayerSpawnPoint.global_position, peer_id)
-	$Players.add_child(player_instance)
+func server_add_player(_peer_id: int, _player_info):
+	#var player_instance : Player = player_scene.instantiate()
+	#player_instance.name = _player_info.name + str(peer_id)
+	#if not player_instance: 
+	#	print_debug("Unable to instantiate player scene for peer ", peer_id)
+	#player_instance.spawn($PlayerSpawnPoint.global_position, peer_id, $Projectiles)		
+	$PlayerSpawner.spawn({
+		peer_id = _peer_id,
+		pos = $PlayerSpawnPoint.global_position
+	})
+	
 	
 	
 	
@@ -60,10 +71,14 @@ func _draw():
 # Server only
 func _on_player_died(player: Player):
 	if player:
-		player.spawn($PlayerSpawnPoint.global_position, player.peer_id)
+		player.spawn($PlayerSpawnPoint.global_position, player.peer_id, $Projectiles)
 
 func _on_player_damage_taken(player: Player):
 	if local_player == player and local_player:
 		hud.update_life(float(local_player.health) / float(local_player.max_health))
 
-
+func client_add_player(_data):
+	var player_instance : Player = player_scene.instantiate()
+	#player_instance.name = Network.players[_data.peer_id].name + str(_data.peer_id)
+	player_instance.spawn(_data.pos, _data.peer_id, $Projectiles)
+	return player_instance

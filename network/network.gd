@@ -24,7 +24,6 @@ var local_player_info = {"name": "Anonymous"}
 var players_loaded = 0
 
 func _ready():
-	multiplayer.connected_to_server.connect(_client_on_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)	
 	
@@ -58,8 +57,8 @@ func create_game():
 	players[1] = local_player_info
 	player_connected.emit(1, local_player_info)
 	
-## The client  has connected to the server (client side)
-func _client_on_connected():
+## The client request a new player to the server
+func request_new_player():
 	print_debug("[",multiplayer.get_unique_id() ,"] ",
 		"Request connection as ", local_player_info.name)
 	_server_request_new_player.rpc_id(1, local_player_info)
