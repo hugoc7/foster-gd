@@ -14,7 +14,7 @@ func _ready():
 	hud.update_player_name(Network.local_player_info.name)
 	
 	#Setup player spawner before spawning players
-	$PlayerSpawner.spawn_function = client_add_player
+	$PlayerSpawner.spawn_function = add_player
 	
 	Network.player_disconnected.connect(on_player_disconnected)
 	
@@ -77,8 +77,9 @@ func _on_player_damage_taken(player: Player):
 	if local_player == player and local_player:
 		hud.update_life(float(local_player.health) / float(local_player.max_health))
 
-func client_add_player(_data):
+func add_player(_data):
 	var player_instance : Player = player_scene.instantiate()
-	#player_instance.name = Network.players[_data.peer_id].name + str(_data.peer_id)
+	if multiplayer.is_server():
+		player_instance.name = Network.players[_data.peer_id].name + str(_data.peer_id)
 	player_instance.spawn(_data.pos, _data.peer_id, $Projectiles)
 	return player_instance
