@@ -11,8 +11,6 @@ var player_instances = {}
 
 	
 func _ready():
-	hud.update_player_name(Network.local_player_info.name)
-	
 	#Setup player spawner before spawning players
 	$PlayerSpawner.spawn_function = add_player
 	
@@ -42,7 +40,8 @@ func server_add_player(_peer_id: int, _player_info):
 	#player_instance.spawn($PlayerSpawnPoint.global_position, peer_id, $Projectiles)		
 	$PlayerSpawner.spawn({
 		peer_id = _peer_id,
-		pos = $PlayerSpawnPoint.global_position
+		pos = $PlayerSpawnPoint.global_position,
+		name = _player_info.name
 	})
 	
 	
@@ -74,12 +73,20 @@ func _on_player_died(player: Player):
 		player.spawn($PlayerSpawnPoint.global_position, player.peer_id, $Projectiles)
 
 func _on_player_damage_taken(player: Player):
-	if local_player == player and local_player:
-		hud.update_life(float(local_player.health) / float(local_player.max_health))
+	print_debug("[", multiplayer.get_unique_id(), "] Damage taken by ", player.peer_id)
+	hud.update_life(player.peer_id, float(player.health) / float(player.max_health))
 
 func add_player(_data):
 	var player_instance : Player = player_scene.instantiate()
 	if multiplayer.is_server():
-		player_instance.name = Network.players[_data.peer_id].name + str(_data.peer_id)
+		player_instance.name = _data.name + str(_data.peer_id)
+		player_instance.peer_id = _data.peer_id
 	player_instance.spawn(_data.pos, _data.peer_id, $Projectiles)
+	player_instance.damage_taken.connect(_on_player_damage_taken)
+	var player_name = _data.name
+	if _data.peer_id == multiplayer.get_unique_id():
+		local_player = player_instance
+		player_name = "[b]" + _data.name + "[/b]"
+	hud.add_player(_data.peer_id, player_name)
+	
 	return player_instance

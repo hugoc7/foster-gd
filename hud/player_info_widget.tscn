@@ -1,0 +1,30 @@
+[gd_scene load_steps=2 format=3 uid="uid://cjw3wj5c21dlk"]
+
+[ext_resource type="Script" path="res://hud/player_info_widget.gd" id="1_ohke5"]
+
+[node name="PlayerInfoWidget" type="HSplitContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ohke5")
+
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+layout_mode = 2
+
+[node name="PlayerName" type="RichTextLabel" parent="HSplitContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_vertical = 4
+bbcode_enabled = true
+text = "J1 : Hugo"
+fit_content = true
+scroll_active = false
+
+[node name="LifeBar" type="ProgressBar" parent="HSplitContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 1.0
+value = 1.0

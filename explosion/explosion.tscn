@@ -3,6 +3,9 @@
 [ext_resource type="Script" path="res://explosion/explosion.gd" id="1_llu8t"]
 [ext_resource type="AudioStream" uid="uid://bckew6t8qt43g" path="res://sons/snd_explosionMissile.wav" id="2_xjl5s"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_evwwr"]
+radius = 79.3095
+
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_c7lai"]
 particle_flag_disable_z = true
 spread = 180.0
@@ -14,16 +17,12 @@ orbit_velocity_max = 0.0
 scale_min = 10.0
 scale_max = 15.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_evwwr"]
-radius = 79.3095
-
-[node name="Explosion" type="GPUParticles2D"]
-amount = 16
-process_material = SubResource("ParticleProcessMaterial_c7lai")
-lifetime = 0.2
-explosiveness = 1.0
-randomness = 1.0
+[node name="Explosion" type="Area2D"]
+monitorable = false
 script = ExtResource("1_llu8t")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_evwwr")
 
 [node name="Sound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("2_xjl5s")
@@ -36,10 +35,9 @@ wait_time = 2.0
 one_shot = true
 autostart = true
 
-[node name="EffectArea" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectArea"]
-shape = SubResource("CircleShape2D_evwwr")
-
-[connection signal="timeout" from="DestroyTimer" to="." method="_on_destroy_timer_timeout"]
-[connection signal="body_entered" from="EffectArea" to="." method="_on_effect_area_body_entered"]
+[node name="ParticleEmitter" type="GPUParticles2D" parent="."]
+amount = 16
+process_material = SubResource("ParticleProcessMaterial_c7lai")
+lifetime = 0.2
+explosiveness = 1.0
+randomness = 1.0

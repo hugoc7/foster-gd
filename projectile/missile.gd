@@ -11,18 +11,21 @@ func _ready():
 	#linear_velocity = 
 	center_of_mass = center_of_mass.rotated(rotation)
 	apply_impulse(MISSILE_SPEED * Vector2.RIGHT.rotated(rotation))
-
-func _process(_delta):
-	if Network.is_server():
-		server_position = position
-	else:
-		position = server_position
+	if multiplayer.is_server():
+		body_entered.connect(_on_body_entered)
+	$AutoDestroyTimer.timeout.connect(destroy)
+		
 	
+func _on_body_entered(body):
+	if body is Player:
+		destroy()
+
+#called on all peers
 func destroy():
 	var explosion_instance = explosion.instantiate()
 	if explosion_instance:
 		explosion_instance.position = position
 		get_parent().add_child(explosion_instance)
 	destroyed.emit(projectile_id)
-	if multiplayer.is_server():
-		queue_free()
+	queue_free()
+

@@ -1,27 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://dw7ndsbqfnsy1"]
+[gd_scene load_steps=4 format=3 uid="uid://dw7ndsbqfnsy1"]
 
 [ext_resource type="Script" path="res://hud/hud.gd" id="1_d7rob"]
 [ext_resource type="PackedScene" uid="uid://63xwu5ht4k11" path="res://hud/score_board.tscn" id="2_bok16"]
+[ext_resource type="PackedScene" uid="uid://cjw3wj5c21dlk" path="res://hud/player_info_widget.tscn" id="2_lrs5d"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_d7rob")
+player_info_widget = ExtResource("2_lrs5d")
 
-[node name="HSplitContainer" type="HSplitContainer" parent="."]
+[node name="PlayerContainer" type="VSplitContainer" parent="."]
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="PlayerName" type="Label" parent="HSplitContainer"]
-layout_mode = 2
-text = "J1 : Hugo"
-
-[node name="LifeBar" type="ProgressBar" parent="HSplitContainer"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-size_flags_vertical = 4
-max_value = 1.0
-value = 1.0
-
 [node name="score_board" parent="." instance=ExtResource("2_bok16")]
+visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5

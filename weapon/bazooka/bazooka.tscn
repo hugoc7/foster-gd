@@ -9,5 +9,3 @@ script = ExtResource("2_xhq7a")
 
 [node name="MissilePosition" type="Marker2D" parent="."]
 position = Vector2(48, 0)
-
-[node name="ProjectileSpawner" type="MultiplayerSpawner" parent="."]

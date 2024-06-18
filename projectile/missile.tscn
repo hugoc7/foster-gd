@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c5bhkwb3pvcnk"]
+[gd_scene load_steps=6 format=3 uid="uid://c5bhkwb3pvcnk"]
 
 [ext_resource type="Script" path="res://projectile/missile.gd" id="1_g0e4g"]
 [ext_resource type="PackedScene" uid="uid://jqld4vho7tdr" path="res://explosion/explosion.tscn" id="2_w240c"]
@@ -10,12 +10,6 @@ bounce = 0.8
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p6e7s"]
 size = Vector2(20, 18)
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_j1202"]
-properties/0/path = NodePath(".:server_position")
-properties/0/spawn = true
-properties/0/sync = true
-properties/0/watch = false
 
 [node name="Missile" type="RigidBody2D"]
 inertia = 201.17
@@ -40,9 +34,3 @@ shape = SubResource("RectangleShape2D_p6e7s")
 wait_time = 2.0
 one_shot = true
 autostart = true
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_j1202")
-
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
-[connection signal="timeout" from="AutoDestroyTimer" to="." method="destroy"]

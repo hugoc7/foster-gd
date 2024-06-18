@@ -7,7 +7,7 @@ signal damage_taken(player: Player)
 
 
 
-@export var max_health = 3000
+@export var max_health = 1000
 
 const SPEED = 300.0
 const JUMP_VELOCITY = -400.0
@@ -29,7 +29,7 @@ func _ready():
 	#setup weapon
 	weapon = $Bazooka
 	weapon.projectile_manager = $ProjectileManager	
-	$Bazooka/ProjectileSpawner.spawn_path = projectiles_parent.get_path()
+	weapon.projectiles_parent = projectiles_parent
 	
 	print_debug("[", Network.get_unique_id(), "] Player ", peer_id, " spawned at ", position)
 	var local_peer_id : int = Network.get_unique_id()
@@ -45,11 +45,16 @@ func die():
 	visible = false
 	emit_signal("player_died", self)#must be called at the end
 	
-func take_damage(amount: int):
+func server_take_damage(amount: int):
+	client_take_damage.rpc(amount)
+	
+@rpc("authority", "reliable", "call_local")
+func client_take_damage(amount: int):
 	health = max(health - amount, 0)
 	if health <= 0:
 		die()
-	emit_signal("damage_taken", self)
+	damage_taken.emit(self)
+	
 	
 func spawn(spawn_position: Vector2, _peer_id: int, _projectile_parent: Node):	
 	position = spawn_position
