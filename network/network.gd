@@ -59,7 +59,7 @@ func create_game():
 	
 ## The client request a new player to the server
 func request_new_player():
-	print_debug("[",multiplayer.get_unique_id() ,"] ",
+	print("[",multiplayer.get_unique_id() ,"] ",
 		"Request connection as ", local_player_info.name)
 	_server_request_new_player.rpc_id(1, local_player_info)
 	
@@ -70,7 +70,7 @@ func _server_request_new_player(player_info):
 	if not multiplayer.is_server():
 		return
 	var player_id : int = multiplayer.get_remote_sender_id()
-	print_debug("[",multiplayer.get_unique_id() ,"] ",
+	print("[",multiplayer.get_unique_id() ,"] ",
 		"Player ", player_id, " has connected as ", player_info.name)
 	players[player_id] = player_info
 	_client_new_player.rpc(player_id, players)
@@ -82,7 +82,7 @@ func _client_new_player(player_id, player_info_list):
 	if multiplayer.is_server():
 		return
 	players = player_info_list
-	print_debug("[",multiplayer.get_unique_id() ,"] ",
+	print("[",multiplayer.get_unique_id() ,"] ",
 		"Player ", player_id, " has connected as ", players[player_id].name)
 	player_connected.emit(player_id,  players[player_id])
 	
@@ -92,7 +92,7 @@ func _on_peer_disconnected(id):
 	if players.has(id):
 		player_info = players[id]
 		player_name = player_info.name
-	print_debug("[",multiplayer.get_unique_id() ,"] ",
+	print("[",multiplayer.get_unique_id() ,"] ",
 		"Player ", id, " (", player_name ,") has disconnected")
 	players.erase(id)
 	player_disconnected.emit(id, player_info)

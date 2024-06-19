@@ -34,7 +34,7 @@ func _ready():
 	$FireCooldownTimer.timeout.connect(_on_fire_cooldown_timeout)
 	
 	
-	print_debug("[", Network.get_unique_id(), "] Player ", peer_id, " spawned at ", position)
+	print("[", Network.get_unique_id(), "] Player ", peer_id, " spawned at ", position)
 	var local_peer_id : int = Network.get_unique_id()
 	var is_local_player : bool = local_peer_id == peer_id
 	
@@ -45,7 +45,7 @@ func _on_fire_cooldown_timeout():
 	is_in_cooldown = false
 	
 func die():
-	print_debug("[", Network.get_unique_id(), "] Player ", peer_id, " died")
+	print("[", Network.get_unique_id(), "] Player ", peer_id, " died")
 	set_physics_process(false)
 	alive = false
 	visible = false
