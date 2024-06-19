@@ -2,6 +2,7 @@ extends Node2D
 
 @export var world_rect : Rect2 = Rect2(0, 0, 1152, 648)
 @export var player_scene : PackedScene
+@export var death_duration: float = 2.0
 var world_center = world_rect.position + world_rect.size / 2
 @onready var player_spawn_pos = $PlayerSpawnPoint.position
 @onready var hud : HUD = $HUD
@@ -68,25 +69,34 @@ func _draw():
 	draw_rect(world_rect, Color.DARK_MAGENTA, false, 3)
 
 # Server only
-func _on_player_died(player: Player):
+func _server_on_player_died(player: Player):
 	if player:
-		player.spawn($PlayerSpawnPoint.global_position, player.peer_id, $Projectiles)
+		await get_tree().create_timer(death_duration).timeout
+		_respawn_player.rpc(player.peer_id)
+		
 
-func _on_player_damage_taken(player: Player):
-	print_debug("[", multiplayer.get_unique_id(), "] Damage taken by ", player.peer_id)
+func _on_player_life_changed(player: Player):
+	print_debug("[", multiplayer.get_unique_id(), "] Life changed player ", player.peer_id)
 	hud.update_life(player.peer_id, float(player.health) / float(player.max_health))
+
+@rpc("authority", "reliable", "call_local")
+func _respawn_player(_peer_id: int):
+	var player: Player = player_instances[_peer_id]
+	player.spawn($PlayerSpawnPoint.global_position, player.peer_id, $Projectiles)
 
 func add_player(_data):
 	var player_instance : Player = player_scene.instantiate()
 	if multiplayer.is_server():
 		player_instance.name = _data.name + str(_data.peer_id)
 		player_instance.peer_id = _data.peer_id
+		player_instance.player_died.connect(_server_on_player_died)
 	player_instance.spawn(_data.pos, _data.peer_id, $Projectiles)
-	player_instance.damage_taken.connect(_on_player_damage_taken)
+	player_instance.life_changed.connect(_on_player_life_changed)
+	
 	var player_name = _data.name
 	if _data.peer_id == multiplayer.get_unique_id():
 		local_player = player_instance
 		player_name = "[b]" + _data.name + "[/b]"
 	hud.add_player(_data.peer_id, player_name)
-	
+	player_instances[_data.peer_id] = player_instance
 	return player_instance

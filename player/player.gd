@@ -3,7 +3,7 @@ extends CharacterBody2D
 class_name Player
 
 signal player_died(player: Player)
-signal damage_taken(player: Player)
+signal life_changed(player: Player)
 
 
 
@@ -39,11 +39,12 @@ func _ready():
 	set_process_unhandled_input(is_local_player)
 	
 func die():
-	print_debug("Player died")
+	print_debug("[", Network.get_unique_id(), "] Player ", peer_id, " died")
 	set_physics_process(false)
 	alive = false
 	visible = false
-	emit_signal("player_died", self)#must be called at the end
+	player_died.emit(self)
+	set_process(false)
 	
 func server_take_damage(amount: int):
 	client_take_damage.rpc(amount)
@@ -53,13 +54,19 @@ func client_take_damage(amount: int):
 	health = max(health - amount, 0)
 	if health <= 0:
 		die()
-	damage_taken.emit(self)
+	life_changed.emit(self)
 	
 	
 func spawn(spawn_position: Vector2, _peer_id: int, _projectile_parent: Node):	
 	position = spawn_position
 	peer_id = _peer_id
 	projectiles_parent = _projectile_parent
+	set_physics_process(Network.is_server())
+	set_process(true)
+	alive = true
+	visible = true
+	health = max_health
+	life_changed.emit(self)
 	
 	
 func _physics_process(delta):
