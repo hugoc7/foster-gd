@@ -24,12 +24,15 @@ var jump_just_pressed = false
 @export var server_position = Vector2.ZERO
 @export var server_weapon_rotation: float = 0
 @export var projectiles_parent: Node = null
+var is_in_cooldown = false
 
 func _ready():
 	#setup weapon
 	weapon = $Bazooka
 	weapon.projectile_manager = $ProjectileManager	
 	weapon.projectiles_parent = projectiles_parent
+	$FireCooldownTimer.timeout.connect(_on_fire_cooldown_timeout)
+	
 	
 	print_debug("[", Network.get_unique_id(), "] Player ", peer_id, " spawned at ", position)
 	var local_peer_id : int = Network.get_unique_id()
@@ -37,6 +40,9 @@ func _ready():
 	
 	set_physics_process(Network.is_server())
 	set_process_unhandled_input(is_local_player)
+
+func _on_fire_cooldown_timeout():
+	is_in_cooldown = false
 	
 func die():
 	print_debug("[", Network.get_unique_id(), "] Player ", peer_id, " died")
@@ -104,7 +110,12 @@ func _process(_delta):
 	
 
 func _fire():
-	weapon.fire()
+	if is_in_cooldown:
+		return
+	if not weapon.fire():
+		return
+	is_in_cooldown = true
+	$FireCooldownTimer.start()
 		
 
 func _unhandled_input(event):
