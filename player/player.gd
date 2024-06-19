@@ -45,6 +45,7 @@ func die():
 	visible = false
 	player_died.emit(self)
 	set_process(false)
+	$CollisionShape2D.set_deferred("disabled", true)
 	
 func server_take_damage(amount: int):
 	client_take_damage.rpc(amount)
@@ -67,6 +68,7 @@ func spawn(spawn_position: Vector2, _peer_id: int, _projectile_parent: Node):
 	visible = true
 	health = max_health
 	life_changed.emit(self)
+	$CollisionShape2D.set_deferred("disabled", false)
 	
 	
 func _physics_process(delta):

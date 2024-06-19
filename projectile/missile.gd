@@ -4,6 +4,8 @@ const MISSILE_SPEED = 400
 @export var explosion : PackedScene
 var projectile_id: int = -1
 @export var server_position: Vector2
+@export var max_bounce = 2
+var bounce_count = 0
 
 signal destroyed(_projectile_id:int)
 
@@ -18,6 +20,10 @@ func _ready():
 func _on_body_entered(body):
 	if body is Player:
 		destroy()
+	else:
+		bounce_count += 1
+		if bounce_count == max_bounce:
+			destroy()
 
 #called on all peers
 func destroy():

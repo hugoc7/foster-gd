@@ -12,12 +12,17 @@ var projectile_manager: ProjectileManager = null
 
 #called by client or host
 func fire():
+	for body in $SpawnArea.get_overlapping_bodies():
+		if not body is Player:
+			return false
+			
 	if not Network.is_server():
 		prediction_missile_instance = missile.instantiate()
 		prediction_missile_instance.position = $MissilePosition.global_position
 		prediction_missile_instance.rotation = $MissilePosition.global_rotation
 		projectiles_parent.add_child(prediction_missile_instance)
 	_server_fire.rpc_id(1, $MissilePosition.global_position, $MissilePosition.global_rotation)
+	return true
 	
 
 @rpc("any_peer", "call_local", "reliable")
