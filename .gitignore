@@ -9,3 +9,5 @@
 icon.svg
 icon.svg.import
 /addons
+.vscode/
+export_presets.cfg
