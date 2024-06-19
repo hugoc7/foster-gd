@@ -51,7 +51,7 @@ func server_add_player(_peer_id: int, _player_info):
 func _process(_delta):
 	
 	#make the camera follow the player
-	if local_player:
+	if local_player != null:
 		$CameraPlayer.position = local_player.position
 	
 	#Server only after this line ---

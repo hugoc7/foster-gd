@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://cpybw1pm07lmj"]
+
+[ext_resource type="AudioStream" uid="uid://bckew6t8qt43g" path="res://sons/snd_explosionMissile.wav" id="2_euvks"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_c7lai"]
+particle_flag_disable_z = true
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 300.0
+initial_velocity_max = 600.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_min = 10.0
+scale_max = 15.0
+
+[node name="MissileFireVFX" type="Node2D"]
+
+[node name="Sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_euvks")
+volume_db = -10.0
+pitch_scale = 0.93
+autoplay = true
+
+[node name="DestroyTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+autostart = true
+
+[node name="ParticleEmitter" type="GPUParticles2D" parent="."]
+amount = 16
+process_material = SubResource("ParticleProcessMaterial_c7lai")
+lifetime = 0.2
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0

@@ -11,8 +11,7 @@ func _ready():
 	#linear_velocity = 
 	center_of_mass = center_of_mass.rotated(rotation)
 	apply_impulse(MISSILE_SPEED * Vector2.RIGHT.rotated(rotation))
-	if multiplayer.is_server():
-		body_entered.connect(_on_body_entered)
+	body_entered.connect(_on_body_entered)
 	$AutoDestroyTimer.timeout.connect(destroy)
 		
 	
@@ -25,7 +24,7 @@ func destroy():
 	var explosion_instance = explosion.instantiate()
 	if explosion_instance:
 		explosion_instance.position = position
-		get_parent().add_child(explosion_instance)
+		get_parent().call_deferred("add_child", explosion_instance)
 	destroyed.emit(projectile_id)
 	queue_free()
 
