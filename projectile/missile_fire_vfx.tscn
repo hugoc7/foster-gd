@@ -1,7 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://cpybw1pm07lmj"]
+[gd_scene load_steps=3 format=3 uid="uid://cpybw1pm07lmj"]
 
 [ext_resource type="Script" path="res://projectile/missile_fire_vfx.gd" id="1_rvsx2"]
-[ext_resource type="AudioStream" uid="uid://bckew6t8qt43g" path="res://sons/snd_explosionMissile.wav" id="2_euvks"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_c7lai"]
 particle_flag_disable_z = true
@@ -18,9 +17,6 @@ scale_max = 7.0
 script = ExtResource("1_rvsx2")
 
 [node name="Sound" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("2_euvks")
-volume_db = -10.0
-pitch_scale = 0.93
 autoplay = true
 
 [node name="DestroyTimer" type="Timer" parent="."]

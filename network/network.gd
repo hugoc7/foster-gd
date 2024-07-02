@@ -11,6 +11,15 @@ const PORT = 7000
 const DEFAULT_SERVER_IP = "127.0.0.1" # IPv4 localhost
 const MAX_CONNECTIONS = 20
 
+#Game synchronisation parameters
+@export var local_prediction_enabled = false
+@export var local_prediction_delay_enabled = false
+@export var local_prediction_delay: float = 0
+@export var server_reconciliation_enabled = false
+@export var remote_prediction_enabled = false
+@export var remote_entity_interpolation = false 
+@export var lag_compensation = false
+
 # This will contain player info for every player,
 # with the keys being each player's unique IDs.
 @export var players = {}

@@ -1,0 +1,155 @@
+[gd_scene load_steps=4 format=3 uid="uid://584oawlb3hxe"]
+
+[ext_resource type="Script" path="res://menu/menu.gd" id="1_dqh1h"]
+[ext_resource type="PackedScene" uid="uid://dy47t2s2h4jpu" path="res://game/game.tscn" id="2_kgamq"]
+[ext_resource type="Script" path="res://menu/menu_network_settings.gd" id="3_mw145"]
+
+[node name="Menu" type="CanvasLayer"]
+script = ExtResource("1_dqh1h")
+game_scene = ExtResource("2_kgamq")
+
+[node name="Popup" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 100
+
+[node name="ConnectionContainer" type="VBoxContainer" parent="Popup"]
+layout_mode = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="Popup/ConnectionContainer"]
+layout_mode = 2
+text = "Menu"
+horizontal_alignment = 1
+
+[node name="Iptext" type="Label" parent="Popup/ConnectionContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Adresse ip :"
+
+[node name="IPInput" type="LineEdit" parent="Popup/ConnectionContainer"]
+custom_minimum_size = Vector2(100, 30)
+layout_mode = 2
+
+[node name="NameText" type="Label" parent="Popup/ConnectionContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Nom du joueur :"
+
+[node name="NameInput" type="LineEdit" parent="Popup/ConnectionContainer"]
+custom_minimum_size = Vector2(100, 30)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Popup/ConnectionContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="JoinButton" type="Button" parent="Popup/ConnectionContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Join"
+
+[node name="HostButton" type="Button" parent="Popup/ConnectionContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Host"
+
+[node name="OptionContainer" type="CenterContainer" parent="Popup/ConnectionContainer"]
+layout_mode = 2
+
+[node name="OptionButton" type="Button" parent="Popup/ConnectionContainer/OptionContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Options"
+
+[node name="OptionsContainer" type="VBoxContainer" parent="Popup"]
+visible = false
+layout_mode = 2
+alignment = 1
+script = ExtResource("3_mw145")
+
+[node name="Title" type="Label" parent="Popup/OptionsContainer"]
+layout_mode = 2
+text = "Network settings"
+horizontal_alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="Popup/OptionsContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 15
+columns = 2
+
+[node name="LocalPredTxt1" type="Label" parent="Popup/OptionsContainer/GridContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Local prediction enabled"
+
+[node name="LocalPredEnabledCheck" type="CheckBox" parent="Popup/OptionsContainer/GridContainer"]
+layout_mode = 2
+
+[node name="LocalPredTxt2" type="Label" parent="Popup/OptionsContainer/GridContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Local prediction delay enabled"
+
+[node name="LocalPredDelayEnabledCheck" type="CheckBox" parent="Popup/OptionsContainer/GridContainer"]
+layout_mode = 2
+
+[node name="LocalPredTxt3" type="Label" parent="Popup/OptionsContainer/GridContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Local prediction delay value"
+
+[node name="LocalPredDelaySpin" type="SpinBox" parent="Popup/OptionsContainer/GridContainer"]
+layout_mode = 2
+max_value = 10000.0
+
+[node name="LocalPredTxt4" type="Label" parent="Popup/OptionsContainer/GridContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Server reconciliation enabled"
+
+[node name="ServerReconciliationCheck" type="CheckBox" parent="Popup/OptionsContainer/GridContainer"]
+layout_mode = 2
+
+[node name="LocalPredTxt5" type="Label" parent="Popup/OptionsContainer/GridContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Remote prediction enabled"
+
+[node name="RemotePredCheck" type="CheckBox" parent="Popup/OptionsContainer/GridContainer"]
+layout_mode = 2
+
+[node name="LocalPredTxt6" type="Label" parent="Popup/OptionsContainer/GridContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Remote entity interpolation enabled"
+
+[node name="EntityInterpolationCheck" type="CheckBox" parent="Popup/OptionsContainer/GridContainer"]
+layout_mode = 2
+
+[node name="LocalPredTxt7" type="Label" parent="Popup/OptionsContainer/GridContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Lag compensation"
+
+[node name="LagCompCheck" type="CheckBox" parent="Popup/OptionsContainer/GridContainer"]
+layout_mode = 2
+
+[node name="ReturnContainer" type="CenterContainer" parent="Popup/OptionsContainer"]
+layout_mode = 2
+
+[node name="ReturnButton" type="Button" parent="Popup/OptionsContainer/ReturnContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Back"
+
+[connection signal="pressed" from="Popup/ConnectionContainer/HBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="Popup/ConnectionContainer/HBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
