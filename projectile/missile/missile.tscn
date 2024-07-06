@@ -1,9 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://c5bhkwb3pvcnk"]
 
-[ext_resource type="Script" path="res://projectile/missile.gd" id="1_g0e4g"]
-[ext_resource type="PackedScene" uid="uid://jqld4vho7tdr" path="res://explosion/explosion.tscn" id="2_w240c"]
-[ext_resource type="PackedScene" uid="uid://cpybw1pm07lmj" path="res://projectile/missile_fire_vfx.tscn" id="3_q2n0q"]
-[ext_resource type="Texture2D" uid="uid://d2r6jfbvxfltx" path="res://sprites/projectiles/spr_missile.png" id="3_vo0g4"]
+[ext_resource type="Script" path="res://projectile/missile/missile.gd" id="1_0q7xc"]
+[ext_resource type="PackedScene" uid="uid://jqld4vho7tdr" path="res://explosion/explosion.tscn" id="2_xrfvy"]
+[ext_resource type="PackedScene" uid="uid://cpybw1pm07lmj" path="res://projectile/missile/missile_fire_vfx.tscn" id="3_wy16g"]
+[ext_resource type="Texture2D" uid="uid://d2r6jfbvxfltx" path="res://sprites/projectiles/spr_missile.png" id="4_f4vwi"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_63cap"]
 friction = 0.2
@@ -20,14 +20,14 @@ physics_material_override = SubResource("PhysicsMaterial_63cap")
 gravity_scale = 0.5
 max_contacts_reported = 1
 contact_monitor = true
-script = ExtResource("1_g0e4g")
-explosion = ExtResource("2_w240c")
+script = ExtResource("1_0q7xc")
+explosion = ExtResource("2_xrfvy")
 
-[node name="MissileFireVFX" parent="." instance=ExtResource("3_q2n0q")]
+[node name="MissileFireVFX" parent="." instance=ExtResource("3_wy16g")]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(1.7, 1.7)
-texture = ExtResource("3_vo0g4")
+texture = ExtResource("4_f4vwi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 scale = Vector2(1.72, 0.76)

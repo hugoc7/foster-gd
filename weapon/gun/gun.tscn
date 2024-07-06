@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://b5eefar62s4nl"]
+
+[ext_resource type="Texture2D" uid="uid://l10573pj8ria" path="res://sprites/armes/spr_fusilpompe.png" id="1_1cyug"]
+[ext_resource type="Script" path="res://weapon/bazooka/bazooka.gd" id="2_xj4qj"]
+[ext_resource type="PackedScene" uid="uid://c3u1a164i0c7m" path="res://projectile/bullet/bullet.tscn" id="3_wikbf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uo4g8"]
+size = Vector2(58, 18)
+
+[node name="Gun" type="Sprite2D"]
+texture = ExtResource("1_1cyug")
+script = ExtResource("2_xj4qj")
+missile = ExtResource("3_wikbf")
+
+[node name="MissilePosition" type="Marker2D" parent="."]
+position = Vector2(56, 0)
+
+[node name="SpawnArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpawnArea"]
+position = Vector2(27, 1)
+shape = SubResource("RectangleShape2D_uo4g8")

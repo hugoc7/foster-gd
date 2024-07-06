@@ -3,7 +3,7 @@ extends Sprite2D
 class_name Bazooka
 
 
-const missile = preload("res://projectile/missile.tscn")
+@export var missile: PackedScene
 
 var prediction_missile_instance : Node = null
 var projectile_manager: ProjectileManager = null

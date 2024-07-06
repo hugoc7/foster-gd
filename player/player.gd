@@ -9,6 +9,9 @@ signal life_changed(player: Player)
 
 @export var max_health = 1000
 
+@export var mouse_wheel_reactivity = 2
+
+
 const SPEED = 300.0
 const JUMP_VELOCITY = -600.0
 
@@ -18,21 +21,30 @@ var jump_counter = 0
 var alive = true
 var health = max_health
 var peer_id : int = 0 # dont specifiy @export 
-var weapon
+var current_weapon
 var direction:float = 0
 var jump_just_pressed = false
 @export var server_position = Vector2.ZERO
 @export var server_weapon_rotation: float = 0
 @export var projectiles_parent: Node = null
 var is_in_cooldown = false
+var is_switch_weapon_in_cooldown = false
+
+var weapons: Array[Node]
+var weapon_index: int = 0
+var scroll_count: int = 0
 
 func _ready():
-	#setup weapon
-	weapon = $Bazooka
-	weapon.projectile_manager = $ProjectileManager	
-	weapon.projectiles_parent = projectiles_parent
+	#setup weapons	
+	weapons = $Weapons.get_children()
+	if weapons.is_empty():
+		print_debug("Error: weapons array empty")
+	current_weapon = weapons[0]
+	for weapon in weapons:
+		weapon.projectile_manager = $ProjectileManager	
+		weapon.projectiles_parent = projectiles_parent
 	$FireCooldownTimer.timeout.connect(_on_fire_cooldown_timeout)
-	
+	$SwitchWeaponTimer.timeout.connect(_on_switch_weapon_cooldown_timeout)
 	
 	print("[", Network.get_unique_id(), "] Player ", peer_id, " spawned at ", position)
 	var local_peer_id : int = Network.get_unique_id()
@@ -40,6 +52,25 @@ func _ready():
 	
 	set_physics_process(Network.is_server())
 	set_process_unhandled_input(is_local_player)
+
+func _on_switch_weapon_cooldown_timeout():
+	is_switch_weapon_in_cooldown = false
+
+@rpc("authority", "reliable", "call_local")
+func client_switch_weapon(to_next: bool):
+	current_weapon.visible = false
+	if to_next:
+		weapon_index += 1
+		if weapon_index >= weapons.size():
+			weapon_index = 0
+	else:
+		weapon_index -= 1
+		if weapon_index < 0:
+			weapon_index = weapons.size() - 1
+	current_weapon = weapons[weapon_index]
+	current_weapon.visible = true
+	#print("Switch to weapon ", weapon_index)
+	
 
 func _on_fire_cooldown_timeout():
 	is_in_cooldown = false
@@ -117,7 +148,7 @@ func _process(_delta):
 		position = server_position
 		
 	if Network.get_unique_id() != peer_id:
-		weapon.rotation = server_weapon_rotation
+		current_weapon.rotation = server_weapon_rotation
 		
 	
 	
@@ -125,7 +156,7 @@ func _process(_delta):
 func _fire():
 	if is_in_cooldown:
 		return
-	if not weapon.fire():
+	if not current_weapon.fire():
 		return
 	is_in_cooldown = true
 	$FireCooldownTimer.start()
@@ -137,8 +168,8 @@ func _unhandled_input(event):
 		
 	#TODO: don't send mouse information too often => setup a maximum sending frequence
 	if event is InputEventMouseMotion:
-		weapon.look_at(get_global_mouse_position())
-		_server_receive_look_inputs.rpc_id(1, weapon.rotation)
+		current_weapon.look_at(get_global_mouse_position())
+		_server_receive_look_inputs.rpc_id(1, current_weapon.rotation)
 		
 	var old_direction = direction
 	var old_jump_input = jump_just_pressed
@@ -147,6 +178,39 @@ func _unhandled_input(event):
 	if old_direction != direction or old_jump_input != jump_just_pressed:
 		_server_receive_move_inputs.rpc_id(1, direction, jump_just_pressed)
 		#print("Jump input: ", jump_just_pressed)
+		
+		
+	var is_mouse_scroll = false
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP or event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			is_mouse_scroll = true
+		
+	if Input.is_action_just_pressed("next_weapon") and not is_switch_weapon_in_cooldown:		
+		if is_mouse_scroll:
+				scroll_count += 1
+				if scroll_count >= mouse_wheel_reactivity:
+					scroll_count = 0
+					_server_switch_weapon(true)
+					is_switch_weapon_in_cooldown = true
+					$SwitchWeaponTimer.start()
+		else:
+			_server_switch_weapon(true)
+			is_switch_weapon_in_cooldown = true
+			$SwitchWeaponTimer.start()
+			
+					
+	if Input.is_action_just_pressed("previous_weapon") and not is_switch_weapon_in_cooldown:
+		if is_mouse_scroll:
+				scroll_count += 1
+				if scroll_count >= mouse_wheel_reactivity:
+					scroll_count = 0
+					_server_switch_weapon(false)
+					is_switch_weapon_in_cooldown = true
+					$SwitchWeaponTimer.start()
+		else:
+			_server_switch_weapon(false)
+			is_switch_weapon_in_cooldown = true
+			$SwitchWeaponTimer.start()
 	
 @rpc("reliable", "any_peer", "call_local")
 func _server_receive_move_inputs(_direction: float, _jump: bool):
@@ -156,7 +220,13 @@ func _server_receive_move_inputs(_direction: float, _jump: bool):
 @rpc("unreliable_ordered", "any_peer", "call_local")
 func _server_receive_look_inputs(angle: float):
 	server_weapon_rotation = angle
-	weapon.rotation = angle
+	current_weapon.rotation = angle
+
+@rpc("reliable", "any_peer", "call_local")
+func _server_switch_weapon(to_next: bool):
+	client_switch_weapon.rpc(to_next)
+	
+	
 
 		
 		

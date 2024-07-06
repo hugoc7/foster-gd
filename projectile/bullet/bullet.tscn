@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=3 uid="uid://c3u1a164i0c7m"]
+
+[ext_resource type="Script" path="res://projectile/bullet/bullet.gd" id="1_1tpmd"]
+[ext_resource type="PackedScene" uid="uid://jqld4vho7tdr" path="res://explosion/explosion.tscn" id="2_345o6"]
+[ext_resource type="PackedScene" uid="uid://cpybw1pm07lmj" path="res://projectile/missile/missile_fire_vfx.tscn" id="3_b6fb5"]
+
+[sub_resource type="Curve" id="Curve_hxjo7"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.7, 0), 0.0, 0.0, 0, 0, Vector2(0.8, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_2clbw"]
+width = 32
+curve = SubResource("Curve_hxjo7")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p6e7s"]
+size = Vector2(20, 18)
+
+[node name="Bullet" type="RigidBody2D"]
+max_contacts_reported = 1
+contact_monitor = true
+script = ExtResource("1_1tpmd")
+explosion = ExtResource("2_345o6")
+
+[node name="MissileFireVFX" parent="." instance=ExtResource("3_b6fb5")]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 0.258824, 1)
+scale = Vector2(1, 1.92)
+texture = SubResource("CurveTexture_2clbw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(1.72, 0.76)
+shape = SubResource("RectangleShape2D_p6e7s")
+
+[node name="AutoDestroyTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+autostart = true
