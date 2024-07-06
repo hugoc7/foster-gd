@@ -10,7 +10,7 @@ signal life_changed(player: Player)
 @export var max_health = 1000
 
 const SPEED = 300.0
-const JUMP_VELOCITY = -400.0
+const JUMP_VELOCITY = -600.0
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -66,6 +66,7 @@ func client_take_damage(amount: int):
 	
 func spawn(spawn_position: Vector2, _peer_id: int, _projectile_parent: Node):	
 	position = spawn_position
+	velocity = Vector2.ZERO
 	peer_id = _peer_id
 	projectiles_parent = _projectile_parent
 	set_physics_process(Network.is_server())
@@ -86,9 +87,10 @@ func _physics_process(delta):
 		jump_counter = 0
 	
 	# Handle Jump.
-	if jump_just_pressed and jump_counter <= 1:
+	if jump_just_pressed and jump_counter < 2:
 		velocity.y = JUMP_VELOCITY
 		jump_counter += 1
+		jump_just_pressed = false
 
 	# Get the input direction and handle the movement/deceleration.
 	
@@ -107,6 +109,8 @@ func _process(_delta):
 		
 	if Network.get_unique_id() != peer_id:
 		weapon.rotation = server_weapon_rotation
+		
+	
 	
 
 func _fire():
@@ -127,10 +131,13 @@ func _unhandled_input(event):
 		weapon.look_at(get_global_mouse_position())
 		_server_receive_look_inputs.rpc_id(1, weapon.rotation)
 		
-	if event.is_action("move_left") or event.is_action("move_right") or event.is_action("jump"):
-		direction = Input.get_axis("move_left", "move_right")
-		jump_just_pressed = Input.is_action_just_pressed("jump")
+	var old_direction = direction
+	var old_jump_input = jump_just_pressed
+	direction = Input.get_axis("move_left", "move_right")
+	jump_just_pressed = Input.is_action_just_pressed("jump")
+	if old_direction != direction or old_jump_input != jump_just_pressed:
 		_server_receive_move_inputs.rpc_id(1, direction, jump_just_pressed)
+		#print("Jump input: ", jump_just_pressed)
 	
 @rpc("reliable", "any_peer", "call_local")
 func _server_receive_move_inputs(_direction: float, _jump: bool):
