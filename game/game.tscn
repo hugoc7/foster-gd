@@ -1,11 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dy47t2s2h4jpu"]
+[gd_scene load_steps=6 format=3 uid="uid://dy47t2s2h4jpu"]
 
 [ext_resource type="Script" path="res://game/game.gd" id="1_8n6jr"]
 [ext_resource type="PackedScene" uid="uid://dsabxjvkd1nub" path="res://plateform/plateform.tscn" id="2_vph1n"]
 [ext_resource type="PackedScene" uid="uid://ba6fs7ryv0xo3" path="res://player/player.tscn" id="2_wvxrb"]
 [ext_resource type="Script" path="res://camera/camera.gd" id="4_vd58l"]
 [ext_resource type="PackedScene" uid="uid://dw7ndsbqfnsy1" path="res://hud/hud.tscn" id="5_qd2b5"]
-[ext_resource type="Script" path="res://plateform/plateform.gd" id="6_a1na7"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_8n6jr")
@@ -42,152 +41,102 @@ rotation = -3.14159
 scale = Vector2(1, -1)
 polygon = PackedVector2Array(-167, -63, -103, -63, -103, -255, -63, -255, -63, -63, 89, -63, 385, -63, 385, -7, 89, -7, 89, 65, -87, 65, -167, 65)
 
-[node name="wall0" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall0" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(1750, 1486)
 polygon = PackedVector2Array(-118, -24, 118, -24, 118, 24, -118, 24)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall1" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall1" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(373.5, 1475.5)
 polygon = PackedVector2Array(-236.5, -23.5, 236.5, -23.5, 236.5, 23.5, -236.5, 23.5)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall2" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall2" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(614.5, 1382.5)
 polygon = PackedVector2Array(-100.5, -43.5, 100.5, -43.5, 100.5, 43.5, -100.5, 43.5)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall3" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall3" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(510.5, 1390)
 polygon = PackedVector2Array(-32.5, -87, 32.5, -87, 32.5, 87, -32.5, 87)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall4" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall4" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(1736.5, 1334.5)
 polygon = PackedVector2Array(-374.5, -38.5, 374.5, -38.5, 374.5, 38.5, -374.5, 38.5)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall5" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall5" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(1763.5, 1401)
 polygon = PackedVector2Array(-23.5, -143, 23.5, -143, 23.5, 143, -23.5, 143)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall6" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall6" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(853.5, 1289)
 polygon = PackedVector2Array(-160.5, -77, 160.5, -77, 160.5, 77, -160.5, 77)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall7" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall7" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(1514.5, 1334)
 polygon = PackedVector2Array(-28.5, -155, 28.5, -155, 28.5, 155, -28.5, 155)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall8" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall8" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(2023, 1309.5)
 polygon = PackedVector2Array(-48, -167.5, 48, -167.5, 48, 167.5, -48, 167.5)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall9" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall9" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(1487, 1050)
 polygon = PackedVector2Array(-245, -21, 245, -21, 245, 21, -245, 21)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall10" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall10" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(532, 1077)
 polygon = PackedVector2Array(-78, -48, 78, -48, 78, 48, -78, 48)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall11" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall11" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(1792, 988.5)
 polygon = PackedVector2Array(-30, -18.5, 30, -18.5, 30, 18.5, -30, 18.5)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall12" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall12" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(1738, 1001.5)
 polygon = PackedVector2Array(-47, -95.5, 47, -95.5, 47, 95.5, -47, 95.5)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall13" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall13" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(2130, 901.5)
 polygon = PackedVector2Array(-28, -30.5, 28, -30.5, 28, 30.5, -28, 30.5)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall14" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall14" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(2164, 877)
 polygon = PackedVector2Array(-21, -39, 21, -39, 21, 39, -21, 39)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall15" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall15" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(319, 976)
 polygon = PackedVector2Array(-149, -172, 149, -172, 149, 172, -149, 172)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall16" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall16" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(851, 752)
 polygon = PackedVector2Array(-126, -102, 126, -102, 126, 102, -126, 102)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall17" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall17" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(1321.5, 718)
 polygon = PackedVector2Array(-48.5, -81, 48.5, -81, 48.5, 81, -48.5, 81)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall18" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall18" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(546.5, 583)
 polygon = PackedVector2Array(-100.5, -74, 100.5, -74, 100.5, 74, -100.5, 74)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall19" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall19" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(1646, 548)
 polygon = PackedVector2Array(-59, -90, 59, -90, 59, 90, -59, 90)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall20" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall20" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(2056, 501.5)
 polygon = PackedVector2Array(-201, -60.5, 201, -60.5, 201, 60.5, -201, 60.5)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall21" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall21" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(1366, 440.5)
 polygon = PackedVector2Array(-154, -59.5, 154, -59.5, 154, 59.5, -154, 59.5)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall22" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall22" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(676, 481.5)
 polygon = PackedVector2Array(-108, -122.5, 108, -122.5, 108, 122.5, -108, 122.5)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall23" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall23" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(788, 382.5)
 polygon = PackedVector2Array(-114, -123.5, 114, -123.5, 114, 123.5, -114, 123.5)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true
 
-[node name="wall24" type="Polygon2D" parent="Plateforms" instance=ExtResource("2_vph1n")]
+[node name="wall24" parent="Plateforms" instance=ExtResource("2_vph1n")]
 position = Vector2(2093.5, 461)
 polygon = PackedVector2Array(-77.5, -214, 77.5, -214, 77.5, 214, -77.5, 214)
-script = ExtResource("6_a1na7")
-metadata/_edit_group_ = true

@@ -63,7 +63,7 @@ func _process(_delta):
 		if not world_rect.has_point(player.position):
 			player.position = world_center
 			if player.alive:
-				player.die()
+				player.client_die.rpc()
 		
 func _draw():
 	draw_rect(world_rect, Color.DARK_MAGENTA, false, 3)
@@ -76,7 +76,7 @@ func _server_on_player_died(player: Player):
 		
 
 func _on_player_life_changed(player: Player):
-	print_debug("[", multiplayer.get_unique_id(), "] Life changed player ", player.peer_id)
+	print("[", multiplayer.get_unique_id(), "] Life changed player ", player.peer_id)
 	hud.update_life(player.peer_id, float(player.health) / float(player.max_health))
 
 @rpc("authority", "reliable", "call_local")

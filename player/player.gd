@@ -44,23 +44,31 @@ func _ready():
 func _on_fire_cooldown_timeout():
 	is_in_cooldown = false
 	
-func die():
+@rpc("authority", "reliable", "call_local")
+func client_die():
 	print("[", Network.get_unique_id(), "] Player ", peer_id, " died")
 	set_physics_process(false)
+	set_process_unhandled_input(false)
 	alive = false
 	visible = false
+	if health > 0:
+		health = 0
+		life_changed.emit(self)
 	player_died.emit(self)
 	set_process(false)
 	$CollisionShape2D.set_deferred("disabled", true)
 	
 func server_take_damage(amount: int):
+	if not Network.is_server():
+		print_debug("Error method called by client")
+		return
 	client_take_damage.rpc(amount)
 	
 @rpc("authority", "reliable", "call_local")
 func client_take_damage(amount: int):
 	health = max(health - amount, 0)
 	if health <= 0:
-		die()
+		client_die()
 	life_changed.emit(self)
 	
 	
@@ -71,6 +79,7 @@ func spawn(spawn_position: Vector2, _peer_id: int, _projectile_parent: Node):
 	projectiles_parent = _projectile_parent
 	set_physics_process(Network.is_server())
 	set_process(true)
+	set_process_unhandled_input(Network.get_unique_id() == peer_id)
 	alive = true
 	visible = true
 	health = max_health
