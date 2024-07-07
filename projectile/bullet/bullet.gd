@@ -14,7 +14,7 @@ func _ready():
 	$AutoDestroyTimer.timeout.connect(destroy)
 		
 	
-func _on_body_entered(body):
+func _on_body_entered(_body):
 	destroy()
 
 #called on all peers

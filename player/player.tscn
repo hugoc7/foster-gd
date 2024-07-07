@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://ba6fs7ryv0xo3"]
+[gd_scene load_steps=9 format=3 uid="uid://ba6fs7ryv0xo3"]
 
 [ext_resource type="Script" path="res://player/player.gd" id="1_xy728"]
 [ext_resource type="Texture2D" uid="uid://7xfs84psr2gx" path="res://sprites/joueurs/spr_joueurbleu.png" id="2_xp66x"]
 [ext_resource type="PackedScene" uid="uid://bfhhtcfxrhhpa" path="res://weapon/bazooka/bazooka.tscn" id="3_aovk8"]
 [ext_resource type="Script" path="res://projectile/ProjectileManager.gd" id="4_rp8ic"]
 [ext_resource type="PackedScene" uid="uid://b5eefar62s4nl" path="res://weapon/gun/gun.tscn" id="4_wq0hn"]
+[ext_resource type="Script" path="res://weapon/manager/WeaponManager.gd" id="6_yxxmb"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h65wu"]
 size = Vector2(30, 68)
@@ -14,7 +15,7 @@ properties/0/path = NodePath(".:server_position")
 properties/0/spawn = true
 properties/0/sync = true
 properties/0/watch = false
-properties/1/path = NodePath(".:server_weapon_rotation")
+properties/1/path = NodePath("WeaponManager:server_weapon_rotation")
 properties/1/spawn = true
 properties/1/sync = true
 properties/1/watch = false
@@ -31,20 +32,23 @@ shape = SubResource("RectangleShape2D_h65wu")
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_3tevu")
 
-[node name="ProjectileManager" type="Node" parent="."]
+[node name="WeaponManager" type="Node2D" parent="."]
+script = ExtResource("6_yxxmb")
+
+[node name="ProjectileManager" type="Node" parent="WeaponManager"]
 script = ExtResource("4_rp8ic")
 
-[node name="FireCooldownTimer" type="Timer" parent="."]
+[node name="FireCooldownTimer" type="Timer" parent="WeaponManager"]
 wait_time = 0.5
 one_shot = true
 
-[node name="Weapons" type="Node2D" parent="."]
-
-[node name="Bazooka" parent="Weapons" instance=ExtResource("3_aovk8")]
-
-[node name="Gun" parent="Weapons" instance=ExtResource("4_wq0hn")]
-visible = false
-
-[node name="SwitchWeaponTimer" type="Timer" parent="."]
+[node name="SwitchWeaponTimer" type="Timer" parent="WeaponManager"]
 wait_time = 0.1
 one_shot = true
+
+[node name="Weapons" type="Node2D" parent="WeaponManager"]
+
+[node name="Bazooka" parent="WeaponManager/Weapons" instance=ExtResource("3_aovk8")]
+
+[node name="Gun" parent="WeaponManager/Weapons" instance=ExtResource("4_wq0hn")]
+visible = false
