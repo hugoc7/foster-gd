@@ -1,0 +1,25 @@
+MEMO TECHNIQUE RESEAU
+=========================
+source : https://www.gabrielgambetta.com/client-server-game-architecture.html
+
+* Ajouter un délai entre l'appui d'une touche et le début du mouvement du joueur local (sur le client)
+  Si par miracle on reçoit un snapshot du serveur avant la fin du délai (en LAN ça pourrait arriver)
+  on annule le délai et on prend directement en compte le snapshot du serveur
+
+* Server reconciliation : on se place toujours du point de vue du client et du joueur qu'il contrôle.
+  Quand je reçois un snapshot du serveur, je recalcule la position que j'aurais eu actuellement si 
+  j'avais été synchronisé avec ce snapshot dans le passé. On part bien du principe que mon joueur est
+  dans le futur par rapport au snapshot du serveur.
+
+* Du point de vue du client, comment gérer les autres joueurs ?
+
+	1) Dead reckoning : on prédit la position future des clients.
+	Avantage: tous les joueurs sont dans le futur. 
+	Inconvénient: Grosses erreurs de prédicition
+	
+	2) Entity interpolation : on affiche le position des autres dans le présent, sans prédiction
+	Avantage: pas d'erreur de prédiction. 
+	Inconvénient: le joueur local est dans le futur et les autres joueurs sont dans le présent
+
+* Lag Compensation: dans le cas où on utilise l'Entity interpolation, les autres joueurs sont dans le
+  passé. Quand on tire, le serveur calcule la position des joueurs au moment où on a tiré.
