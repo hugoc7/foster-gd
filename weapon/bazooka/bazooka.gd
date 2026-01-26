@@ -57,4 +57,3 @@ func _client_spawn_projectile(_pos, _rot, _peer_id):
 	if not already_spawned:
 		projectiles_parent.add_child(missile_instance)
 	
-
